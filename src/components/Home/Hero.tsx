@@ -7,7 +7,7 @@ export const Hero = () => {
     <div
       className="
          border-b border-gray-700 font-Alegreya_Sans py-20"
-      // style={{ clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0 100%)' }}
+    // style={{ clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0 100%)' }}
     >
       <div className="flex flex-col items-start justify-center w-11/12 h-full max-w-5xl mx-auto text-white sm:w-10/12 md:9/12">
         <div className="flex  flex-col  md:flex-row  justify-between md:items-center w-full  ">
@@ -35,15 +35,17 @@ export const Hero = () => {
         </div>
 
         <p className="font-normal text-gray-300 my-7 text-lg">
-          Hey there! I'm a self-taught Fullstack Engineer currently rocking as a Front-End Developer
-          at <ExternalLink url="https://maltem.com/en/" title="Maltem Africa" /> . My passion lies
-          in crafting clean, top-notch code that stays ahead of the curve in web development trends.
-          Check out my <ExternalLink url={RESUME_URL} title="Resume" />, —I'm open to exciting new
-          opportunities!
+          Hey there! I'm Wassim Nassour, a Full Stack Developer passionate about building efficient
+          web and mobile apps. I currently work as a Front-End Developer at
+          <ExternalLink url="https://maltem.com/en/" title="Maltem Africa" /> , using React,
+          Next.js, and TypeScript. I also have experience as a Java Spring Developer, building
+          robust backend systems. Skilled in Node.js, Golang, and React Native, I love solving
+          complex problems and staying ahead in tech. Let's connect!, Check out my{' '}
+          <ExternalLink url={RESUME_URL} title="Resume" />, —I'm open to exciting new opportunities!
         </p>
         <h3 className="font-extrabold text-gray-400 text-xl">Quick intro 👋🏻</h3>
         <ul className="mb-4 pl-1 space-y-1 mt-2 text-lg">
-          <li className="">🏠 Working remotely +3 years </li>
+          <li className="">🏠 Working remotely +5 years </li>
           <li className="">💻 interested in fullstack development </li>
           <li className="">🛸 Technologies i'm using : React , Typescript , Node , Golang ... </li>
         </ul>
