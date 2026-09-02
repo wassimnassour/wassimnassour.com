@@ -36,7 +36,7 @@ export const Hero = () => {
 
         <p className="font-normal text-gray-300 my-7 text-lg">
           Hey there! I'm Wassim Nassour, a Full Stack Developer passionate about building efficient
-          web and mobile apps. I currently work as a Front-End Developer at
+          web and mobile apps. I currently work as Senior Front-End Developer at
           <ExternalLink url="https://maltem.com/en/" title="Maltem Africa" /> , using React,
           Next.js, and TypeScript. I also have experience as a Java Spring Developer, building
           robust backend systems. Skilled in Node.js, Golang, and React Native, I love solving
