@@ -35,9 +35,9 @@ export const ExperienceAndAbout = () => {
                           aria-hidden="true"
                         >
                           <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                           ></path>
                         </svg>
                       </span>
@@ -51,23 +51,34 @@ export const ExperienceAndAbout = () => {
                 <p className="mt-2 text-sm leading-normal  text-gray-400 whitespace-pre-wrap">
                   {job.description}
                 </p>
-                <ul className="leading-normal  text-gray-400  text-sm ">
+                <div className="leading-normal text-gray-400 text-sm">
                   {/* Projects */}
                   {job?.projects?.map(project => (
-                    <li className="inline-block mt-4 " key={project.name + 'Projects'}>
-                      <h4 className="text-secondary">{project.name}:</h4>
-                      <p className="">{project.description}</p>
-                    </li>
+                    <div className="mt-4" key={project.name + 'Projects'}>
+                      <h4 className="text-secondary font-medium">{project.name}:</h4>
+                      <p className="mt-0.5 text-gray-400">{project.description}</p>
+                      {project?.tasks && project.tasks.length > 0 && (
+                        <ul className="mt-2 space-y-1.5 list-disc ml-5">
+                          {project.tasks.map(task => (
+                            <li key={task + 'task'} className="text-gray-400">
+                              {task}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   ))}
-                  {/* Tasks */}
-                  <div className="mt-3">
-                    {job?.tasks?.map(task => (
-                      <li className="list-disc ml-6" key={task + 'task'}>
-                        {task}
-                      </li>
-                    ))}
-                  </div>
-                </ul>
+                  {/* Tasks for jobs without projects */}
+                  {job?.tasks && job.tasks.length > 0 && (
+                    <ul className="mt-3 space-y-1.5 list-disc ml-5">
+                      {job.tasks.map(task => (
+                        <li key={task + 'task'} className="text-gray-400">
+                          {task}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
                 <ul className="mt-4 flex flex-wrap" aria-label="Technologies used">
                   {job.technologies?.map(technology => (
                     <li className="mr-1.5 mt-2" key={technology}>
