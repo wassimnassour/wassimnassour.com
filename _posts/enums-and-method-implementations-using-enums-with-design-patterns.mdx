@@ -1,0 +1,381 @@
+---
+title: 'Enums and Method Implementations: Using Enums with Design Patterns'
+excerpt: "Enums are more than just constants in Java. They can encapsulate behavior and provide simple implementations of design patterns like Singleton and Strategy. Let's explore how to use them beyond their basic purpose."
+coverImage: '/assets/blog/enums-and-method-implementations-using-enums-with-design-patterns/cover.png'
+date: '20/11/2025'
+featured: false
+author:
+  name: Wassim Nassour
+  picture: '/assets/wassim.jpg'
+
+ogImage:
+  url: '/assets/blog/enums-and-method-implementations-using-enums-with-design-patterns/cover.png'
+  thumbnail: '/assets/blog/enums-and-method-implementations-using-enums-with-design-patterns/cover.png'
+---
+
+
+
+
+## 1. Introduction
+
+Enums are a special type of class used to define a fixed set of constants. But they can do more than just hold values.
+
+Like regular classes, enums can have fields, constructors, and methods. They can even have abstract methods, allowing each enum constant to provide its own implementation.
+
+This makes enums useful for more than defining a list of possible values. We can also use them to encapsulate behavior and implement some design patterns in a simple way.
+
+In this article, we will look at how enums can help us implement patterns such as **Singleton** and **Strategy**, and when this approach makes sense.
+
+## 2. A quick look at enums
+
+Let's start with a simple example:
+
+```java
+public enum Status {
+    APPROVED,
+    NOT_APPROVED,
+    PENDING
+}
+```
+
+We can use it like any other type:
+
+```java
+private Status currentStatus = Status.APPROVED;
+```
+
+One advantage over using `public static final int` constants is that enums provide type safety. We cannot accidentally assign an unrelated integer to a variable of type `Status`.
+
+But what makes enums more interesting is that each constant can also have its own behavior.
+
+## 3. Enums with fields, constructors, and methods
+
+Enums can contain fields and constructors, just like regular classes.
+
+For example, imagine we want to give each status a readable label and define whether that status is final:
+
+```java
+public enum Status {
+
+    NEW("New") {
+        @Override
+        public boolean isFinal() {
+            return false;
+        }
+    },
+
+    APPROVED("Approved") {
+        @Override
+        public boolean isFinal() {
+            return true;
+        }
+    },
+
+    REJECTED("Rejected") {
+        @Override
+        public boolean isFinal() {
+            return true;
+        }
+    };
+
+    private final String label;
+
+    Status(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public abstract boolean isFinal();
+}
+```
+
+Here, each constant provides its own implementation of `isFinal()`.
+
+When we call:
+
+```java
+Status status = Status.APPROVED;
+
+System.out.println(status.getLabel());
+System.out.println(status.isFinal());
+```
+
+The enum uses the implementation associated with the selected constant.
+
+This is interesting because we no longer need to write a `switch` or multiple `if` statements just to determine the behavior of a status.
+
+Each constant knows how it should behave.
+
+## 4. Using enums to encapsulate behavior
+
+Let's take the previous example a little further.
+
+Imagine we have a system that handles loan requests. Depending on the current status, some actions might be allowed and others might not.
+
+One approach would be to put all the logic in a service:
+
+```java
+public boolean canCancel(Loan loan) {
+    switch (loan.getStatus()) {
+        case NEW:
+            return true;
+        case APPROVED:
+            return true;
+        case REJECTED:
+            return false;
+        default:
+            return false;
+    }
+}
+```
+
+This works, but as the number of statuses and behaviors grows, the service can become full of conditions.
+
+We can move that behavior into the enum instead:
+
+```java
+public enum LoanStatus {
+
+    NEW {
+        @Override
+        public boolean canCancel() {
+            return true;
+        }
+    },
+
+    APPROVED {
+        @Override
+        public boolean canCancel() {
+            return true;
+        }
+    },
+
+    REJECTED {
+        @Override
+        public boolean canCancel() {
+            return false;
+        }
+    };
+
+    public abstract boolean canCancel();
+}
+```
+
+Now the service becomes simpler:
+
+```java
+public boolean canCancel(Loan loan) {
+    return loan.getStatus().canCancel();
+}
+```
+
+The important idea here is that we are moving behavior closer to the data it belongs to.
+
+This can be useful when the behavior is small, fixed, and directly related to the enum value.
+
+However, we should not put every business rule inside an enum. If the behavior requires database access, external services, or complex dependencies, a dedicated service is usually a better choice. Otherwise, the enum can become a God object.
+
+## 5. Using enums to implement the Singleton pattern
+
+The Singleton pattern ensures that a class has only one instance and provides a common access point to it.
+
+Usually, we implement it with a private constructor and a static instance:
+
+```java
+public class ApplicationConfiguration {
+
+    private static final ApplicationConfiguration INSTANCE =
+            new ApplicationConfiguration();
+
+    private ApplicationConfiguration() {
+    }
+
+    public static ApplicationConfiguration getInstance() {
+        return INSTANCE;
+    }
+}
+```
+
+But Java gives us another way to implement this pattern using enums:
+
+```java
+public enum ApplicationConfiguration {
+
+    INSTANCE;
+
+    private String applicationName = "Reliable Commerce";
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+}
+```
+
+We can access it directly:
+
+```java
+String name = ApplicationConfiguration.INSTANCE.getApplicationName();
+```
+
+Why does this work?
+
+Each enum constant is created only once per enum class loaded by a classloader. So `INSTANCE` represents one shared instance.
+
+The enum approach also gives us important guarantees:
+
+- The instance is initialized safely by the JVM.
+- It is safe when accessed by multiple threads.
+- Java provides serialization protection for enum constants.
+
+This makes enum Singleton a simple and reliable implementation when we genuinely need a Singleton.
+
+One important note for Spring applications: for application services and configuration components, we should normally use Spring-managed beans instead of creating our own Singleton. Spring already manages the lifecycle and scope of these objects.
+
+## 6. Using enums to implement the Strategy pattern
+
+The Strategy pattern allows us to define multiple implementations of an operation and choose which one to execute.
+
+Let's take a payment system as an example.
+
+We might have different payment methods, such as PayPal and Visa.
+
+A traditional Strategy implementation could look like this:
+
+```java
+public interface PaymentStrategy {
+    void pay(Payment payment);
+}
+```
+
+Then we create a class for each implementation:
+
+```java
+public class PaypalPaymentStrategy implements PaymentStrategy {
+
+    @Override
+    public void pay(Payment payment) {
+        System.out.println("Pay with PayPal");
+    }
+}
+```
+
+```java
+public class VisaPaymentStrategy implements PaymentStrategy {
+
+    @Override
+    public void pay(Payment payment) {
+        System.out.println("Pay with Visa");
+    }
+}
+```
+
+This is a good approach, especially when strategies have their own dependencies or need to be injected by Spring.
+
+But what if our strategies are simple and fixed?
+
+We can use an enum instead:
+
+```java
+public enum PaymentStrategy {
+
+    PAYPAL {
+        @Override
+        public void pay(Payment payment) {
+            System.out.println("Pay with PayPal");
+        }
+    },
+
+    VISA {
+        @Override
+        public void pay(Payment payment) {
+            System.out.println("Pay with Visa");
+        }
+    };
+
+    public abstract void pay(Payment payment);
+}
+```
+
+Now we can select a strategy and execute it:
+
+```java
+PaymentStrategy strategy = PaymentStrategy.PAYPAL;
+
+strategy.pay(payment);
+```
+
+Each enum constant provides its own implementation of the same method.
+
+This gives us a simple way to implement the Strategy pattern without creating multiple classes.
+
+### When should we use each approach?
+
+The enum approach is useful when:
+
+- The list of strategies is fixed.
+- The implementations are relatively simple.
+- We don't need to inject different dependencies into each strategy.
+- We want to keep the implementation close to the available options.
+
+The traditional Strategy pattern is more appropriate when:
+
+- Strategies need dependencies.
+- New implementations may be added dynamically.
+- We need Spring dependency injection.
+- Different implementations have more complex responsibilities.
+
+So the enum approach does not replace the traditional Strategy pattern. It gives us another option when the problem is small and the available strategies are known in advance.
+
+## 7. A couple of useful enum collections: EnumSet and EnumMap
+
+Java also provides two specialized collections designed to work with enums.
+
+### EnumSet
+
+`EnumSet` is a specialized implementation of `Set` that stores enum values.
+
+For example:
+
+```java
+EnumSet<Status> activeStatuses = EnumSet.of(
+        Status.NEW,
+        Status.APPROVED
+);
+```
+
+It is particularly useful when we need to work with a group of enum values. Internally, it uses a compact representation, making it very efficient.
+
+### EnumMap
+
+`EnumMap` is a specialized implementation of `Map` where the keys are enum constants.
+
+For example:
+
+```java
+EnumMap<Status, String> messages = new EnumMap<>(Status.class);
+
+messages.put(Status.NEW, "Waiting for review");
+messages.put(Status.APPROVED, "Your request was approved");
+messages.put(Status.REJECTED, "Your request was rejected");
+```
+
+Since the keys are enum values, `EnumMap` can use an array-based internal representation rather than a general-purpose hash table.
+
+These collections are useful when we want to work with enum values efficiently, especially when the enum is used as a fixed set of keys or options.
+
+## 8. Conclusion
+
+Enums are more than a way to define a fixed list of constants.
+
+By giving them fields, constructors, and method implementations, we can use them to encapsulate behavior and simplify some common design patterns.
+
+The Singleton pattern is one example where enums provide a safe and simple implementation. The Strategy pattern is another example where we can avoid creating multiple classes when the available strategies are fixed and simple.
+
+But, as always, the goal is not to use enums everywhere. We should choose the approach that makes the code easier to understand, maintain, and extend.
+
+Sometimes a simple enum is enough. Sometimes a dedicated class or interface is the better solution.
+
+The important thing is understanding that enums are not just constants. They can also be a useful tool for designing our applications.
