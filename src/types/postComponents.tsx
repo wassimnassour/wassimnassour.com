@@ -1,7 +1,7 @@
-import { CSSProperties, ReactChild } from 'react'
+import type { ReactNode } from 'react'
 
 export interface MdxComponent {
-  children: ReactChild
+  children: ReactNode
   className?: string
 }
 

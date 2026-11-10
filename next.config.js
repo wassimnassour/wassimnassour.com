@@ -5,11 +5,12 @@ const withMDX = mdxx({
 
 export default withMDX({
   reactStrictMode: true,
-  env: {
-    DISABLE_NEW_JSX_TRANSFORM: process.env.DISABLE_NEW_JSX_TRANSFORM
-  },
   images: {
-    domains: ['lh6.googleusercontent.com', 'media.giphy.com']
+    remotePatterns: [
+      { protocol: 'https', hostname: 'lh6.googleusercontent.com' },
+      { protocol: 'https', hostname: 'media.giphy.com' }
+    ],
+    qualities: [75, 100]
   },
 
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx']
