@@ -17,9 +17,8 @@ export const About = () => {
             <Image
               src="/assets/wassim.jpg"
               alt="Picture of the author wassim portfolio"
-              layout="fill"
-              objectFit="cover" // change to suit your needs
-              className="w-full h-full rounded-full " // just an example
+              fill
+              className="w-full h-full rounded-full object-cover"
             />
           </div> */}
           <p className="ml-6 text-white w-fit">{ABOUT}</p>

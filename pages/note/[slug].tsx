@@ -23,6 +23,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { content, data } = getNoteContent(params?.slug as string)
 
   const mdxSource = await serialize(content, {
+    // Repository MDX uses expressions for component props and inline spacing.
+    blockJS: false,
     scope: data,
     mdxOptions: {
       rehypePlugins: [rehypeHighlight]
