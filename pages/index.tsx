@@ -1,47 +1,64 @@
-import { Blog, Contact, Hero, Notes } from 'components'
-import { GetStaticProps } from 'next'
-import { IPost } from 'types'
+import type { GetStaticProps } from 'next'
 import { NextSeo } from 'next-seo'
-import { getFeaturedPosts } from '../lib'
-import { SITE_URL } from 'constant'
-import { getFeaturedNotes } from '../lib/notesUtility'
-import { INote } from 'types/notes'
+import { PROFILE_DESCRIPTION, PROFILE_TITLE } from 'constant'
+import { Portfolio, type Writing } from 'components/Home/Portfolio'
+import { getAllPosts } from '../lib/blogUtils'
+import { getAllNotes } from '../lib/notesUtility'
 
 interface Props {
-  featuredPosts: IPost[]
-  featuredNotes: INote[]
-}
-export default function Home({ featuredPosts, featuredNotes }: Props) {
-  return (
-    <>
-      <NextSeo
-        title="Wassim | Home"
-        openGraph={{
-          title: 'Wassim | Home',
-          url: SITE_URL
-        }}
-      />
-
-      <div>
-        <Hero />
-
-        <div className="w-11/12 md:w-9-10 lg:max-w-5xl mx-auto">
-          <Notes notes={featuredNotes} />
-          <Blog Posts={featuredPosts} />
-          <Contact />
-        </div>
-      </div>
-    </>
-  )
+  notes: Writing[]
+  articles: Writing[]
+  year: number
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const featuredPosts = getFeaturedPosts()
-  const featuredNotes = getFeaturedNotes()
-  return {
-    props: {
-      featuredPosts,
-      featuredNotes
-    }
-  }
+const title = `Wassim Nassour | ${PROFILE_TITLE}`
+const description = PROFILE_DESCRIPTION
+const url = 'https://www.wassimnassour.com/'
+
+const Home = ({ notes, articles, year }: Props) => (
+  <>
+    <NextSeo
+      title={title}
+      description={description}
+      canonical={url}
+      openGraph={{ title, description, url }}
+    />
+    <Portfolio notes={notes} articles={articles} year={year} />
+  </>
+)
+
+Home.standalone = true
+
+export default Home
+
+const fields = [
+  'slug',
+  'title',
+  'excerpt',
+  'date',
+  'homepageCategory',
+  'homepageTitle',
+  'homepageSummary'
+]
+
+function selectWriting(entries: Record<string, string>[], route: '/note' | '/posts'): Writing[] {
+  return entries
+    .filter(entry => entry.homepageCategory)
+    .slice(0, 3)
+    .map(entry => ({
+      href: `${route}/${entry.slug}`,
+      title: entry.homepageTitle || entry.title,
+      summary: entry.homepageSummary || entry.excerpt,
+      category: entry.homepageCategory,
+      date: entry.date
+    }))
 }
+
+export const getStaticProps: GetStaticProps<Props> = async () => ({
+  props: {
+    notes: selectWriting(getAllNotes(fields), '/note'),
+    articles: selectWriting(getAllPosts(fields), '/posts'),
+    year: new Date().getUTCFullYear()
+  },
+  revalidate: 86400
+})

@@ -1,65 +1,95 @@
 import Link from 'next/link'
-import { useState } from 'react'
-import { Close, Menu } from 'ui/icons'
-import { NAV_LINKS } from 'constant'
-import { SideBar } from 'components'
-export const Nav = () => {
-  const [isBackDropOpen, setBackDrop] = useState(false)
-  const toggleBackDrop = () => {
-    setBackDrop(!isBackDropOpen)
-  }
+import { useRef, useState } from 'react'
+import { EMAIL } from 'constant'
+
+const frame = 'mx-auto w-full max-w-[1240px] px-[22px] min-[601px]:px-[34px] min-[1101px]:px-12'
+const linkStyle =
+  'inline-flex min-h-11 items-center gap-[13px] text-xs text-portfolio-ink hover:underline decoration-secondary underline-offset-4'
+const mail = `mailto:${EMAIL}`
+const navigation = [
+  ['Notes', '/notes'],
+  ['Articles', '/blog'],
+  ['About', '/about'],
+  ['Contact', '/#contactMe']
+]
+
+export function Nav() {
+  const [open, setOpen] = useState(false)
+  const menuButton = useRef<HTMLButtonElement>(null)
 
   return (
-    <div className="sticky top-0 z-20 flex items-center w-full h-24 px-8 shadow-md md:px-0 md:justify-between lg:justify-around bg-primary">
-      <div className="flex items-center justify-between w-11/12 max-w-5xl mx-auto md:9/12">
-        <div className="max-w-5xl">
-          <Link href="/">
-            <h1 className="text-3xl italic font-bold text-white">
-              <span className="text-secondary">W</span>N
-            </h1>
-          </Link>
-        </div>
-        <nav className="flex-row items-center hidden md:flex">
-          <ul className="flex flex-row">
-            {NAV_LINKS.map(_item => (
-              <li
-                key={_item.name}
-                className="mx-3 text-white cursor-pointer"
-                onClick={() => setBackDrop(false)}
-              >
-                <Link href={_item.url} className="my-3">
-                  {_item.name}
-                </Link>
-              </li>
-            ))}
-
-            <li className="mx-3 text-white cursor-pointer" onClick={() => setBackDrop(false)}>
-              <a
-                href="https://docs.google.com/document/d/1yPVQfaxMkXqPNVjwvSNAPk3mVgfZ0vvFr2d_qZoyS9c/edit?tab=t.0"
-                target="_blank"
-                className="my-3"
-              >
-                resume
-              </a>
-            </li>
-          </ul>
+    <header
+      className="sticky top-0 z-20 border-b border-portfolio-ink/[0.07] bg-primary/95 font-portfolio text-portfolio-ink backdrop-blur-lg [&_a:focus-visible]:outline [&_button:focus-visible]:outline"
+      onKeyDown={event => {
+        if (event.key === 'Escape' && open) {
+          setOpen(false)
+          menuButton.current?.focus()
+        }
+      }}
+    >
+      <div
+        className={`${frame} relative flex h-[69px] items-center justify-between gap-8 min-[601px]:h-[82px]`}
+      >
+        <Link
+          href="/"
+          onClick={() => setOpen(false)}
+          aria-label="Wassim Nassour, home"
+          className="whitespace-nowrap font-mono text-[25px] font-bold tracking-[-2px]"
+        >
+          W<span className="text-secondary">/</span>N<span className="text-secondary">.</span>
+        </Link>
+        <button
+          ref={menuButton}
+          type="button"
+          aria-expanded={open}
+          aria-controls="portfolio-nav"
+          onClick={() => setOpen(!open)}
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[5px] border border-portfolio-border min-[601px]:hidden"
+        >
+          <span className="sr-only">{open ? 'Close navigation' : 'Open navigation'}</span>
+          <svg
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            aria-hidden="true"
+          >
+            <path
+              d={open ? 'M5 5l14 14M19 5L5 19' : 'M4 6h16M4 12h16M4 18h16'}
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+        <nav
+          id="portfolio-nav"
+          aria-label="Main navigation"
+          className={`${
+            open ? 'flex' : 'hidden'
+          } absolute inset-x-0 top-full flex-col border-b border-portfolio-border bg-portfolio-card px-[22px] py-3 min-[601px]:static min-[601px]:flex min-[601px]:flex-row min-[601px]:gap-[18px] min-[601px]:border-0 min-[601px]:bg-transparent min-[601px]:p-0 min-[851px]:gap-[38px]`}
+        >
+          {navigation.map(([label, href]) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setOpen(false)}
+              className={`${linkStyle} tracking-[0.03em]`}
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
+        <a
+          href={mail}
+          className={`${linkStyle} hidden whitespace-nowrap rounded-[5px] border border-portfolio-border px-[17px] font-bold hover:border-secondary min-[601px]:inline-flex`}
+        >
+          Contact{' '}
+          <span aria-hidden="true" className="text-secondary">
+            ↗
+          </span>
+        </a>
       </div>
-
-      <SideBar isBackDropOpen={isBackDropOpen} toggleBackDrop={toggleBackDrop} />
-
-      <button className="block ml-auto md:hidden " onClick={() => toggleBackDrop()}>
-        <Menu className="fill-white" />
-      </button>
-    </div>
+    </header>
   )
-}
-
-const styles = {
-  item: {
-    listStyle: 'none',
-    cursor: 'pointer',
-    mx: 3,
-    color: 'white'
-  }
 }

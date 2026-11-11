@@ -9,8 +9,12 @@ export const PHONE_NUMBER = '+212641327128'
 export const EMAIL = 'nassourwassim@gmail.com'
 export const TWITTER_URL = 'https://www.twitter.com/wassimnassour'
 export const LINKED_IN_URL = 'https://www.linkedin.com/in/wassim-nassour-a21b53138/'
+export const PROFILE_TITLE = 'Software Engineer'
+export const EXPERIENCE_YEARS = '6+ years'
+export const PROFILE_DESCRIPTION =
+  'Wassim Nassour is a software engineer in Casablanca with 6+ years of experience across application architecture, web and mobile development, and backend APIs.'
 export const ABOUT =
-  'Senior Frontend Engineer with 5+ years of experience building large-scale web and mobile applications using React, Next.js, and React Native. Experienced in banking, e-commerce, and SaaS products with strong expertise in TypeScript, testing, architecture, and performance optimization. Recently expanded into Java Spring Boot backend development and microservices.'
+  'I’m a software engineer in Casablanca with 6+ years of experience building software for banking, e-commerce, and SaaS products. My work spans application architecture, web and mobile interfaces, and backend APIs. I care about making software easier to maintain through clear design, automated testing, and performance work.'
 
 export const NoteColors = {
   purple: '#B692FE',
@@ -45,23 +49,24 @@ export const NAV_LINKS = [
 ]
 
 export const socialLinks = [
-  { url: TWITTER_URL, icon: <TwitterIcon /> },
+  { url: TWITTER_URL, label: 'Twitter', icon: <TwitterIcon /> },
   {
     url: LINKED_IN_URL,
+    label: 'LinkedIn',
     icon: <LinkedInIcon />
   },
-  { url: 'https://github.com/wassimnassour', icon: <GithubIcon /> },
-  { url: `mailto:${EMAIL}`, icon: <EmailIcon /> }
+  { url: 'https://github.com/wassimnassour', label: 'GitHub', icon: <GithubIcon /> },
+  { url: `mailto:${EMAIL}`, label: 'Email', icon: <EmailIcon /> }
 ]
 
 export const jobs = [
   {
     name: 'Maltem Africa',
-    role: 'Senior Front-end Developer',
+    role: 'Senior Full Stack Engineer',
     date: '2024/01 – Present / Casablanca',
     url: 'https://maltem.com/en/',
     description:
-      'Working as a Front-end Developer on critical banking and enterprise applications using modern frontend architectures and backend integrations.',
+      'Build banking and enterprise applications, develop Spring Boot REST APIs, and mentor frontend developers.',
     projects: [
       {
         name: 'Yakeey',
@@ -115,8 +120,8 @@ export const jobs = [
   },
   {
     name: 'Obytes',
-    role: 'Front-end Developer',
-    date: '2021 – 2023 (3 years) / Casablanca',
+    role: 'Frontend Developer',
+    date: '2021 – 2023 / Casablanca',
     url: 'http://www.obytes.com',
     description:
       'Worked as a front-end developer on various projects, building both web and mobile apps from scratch and maintaining existing codebases using React, React Native, and Node.js.',
@@ -201,8 +206,8 @@ export const jobs = [
   },
   {
     name: 'Rantt.com',
-    role: 'FullStack Developer',
-    date: '2020 – 2021 (1 year) / New York',
+    role: 'Full-Stack Developer',
+    date: '2019 – 2021 / New York',
     url: 'https://rantt.com',
     description:
       "Social media platform focused on community-led content. Built the core social features for users and a back-office dashboard for community creators and Rantt's internal team.",

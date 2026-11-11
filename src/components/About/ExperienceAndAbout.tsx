@@ -1,18 +1,17 @@
-import Link from 'next/link'
 import { jobs } from 'constant'
 
 export const ExperienceAndAbout = () => {
   return (
     <div className="col-span-1  lg:col-span-4  p-4 md:p-0">
-      <ul className="mt-10 " id="Experience">
+      <h2 id="Experience" className="mb-6 scroll-mt-24 text-2xl font-semibold text-portfolio-ink">
+        Experience
+      </h2>
+      <ul>
         {jobs?.map(job => (
           <li className="mb-12" key={job.name}>
             <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
               <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
-              <header
-                className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:col-span-2 leading-6"
-                aria-label="2018 to Present"
-              >
+              <header className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:col-span-2 leading-6">
                 {job.date}
               </header>
               <div className="z-10 sm:col-span-6">
@@ -44,9 +43,7 @@ export const ExperienceAndAbout = () => {
                     </span>
                   </a>
 
-                  <div className="text-slate-500" aria-hidden="true">
-                    {job.role}
-                  </div>
+                  <div className="text-portfolio-muted">{job.role}</div>
                 </h3>
                 <p className="mt-2 text-sm leading-normal  text-gray-400 whitespace-pre-wrap">
                   {job.description}
