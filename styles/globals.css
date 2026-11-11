@@ -31,3 +31,10 @@ p {
 pre {
   margin: 20px 0;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    scroll-behavior: auto;
+  }
+}

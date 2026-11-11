@@ -2,7 +2,7 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-import { SITE_URL, SITE_NAME, TWITTER_USERNAME } from 'constant'
+import { PROFILE_DESCRIPTION, PROFILE_TITLE, SITE_URL, SITE_NAME, TWITTER_USERNAME } from 'constant'
 
 type Props = {
   pageTitle?: string
@@ -19,11 +19,9 @@ export const Meta: React.FC<Props> = ({ imagePath, pageTitle, description }: Pro
   const router = useRouter()
   const ogUrl = SITE_URL + router.asPath
   const ogType = router.pathname === '/' ? 'website' : 'article'
-  const ogTitle = pageTitle ? pageTitle : 'Wassim | Home'
+  const ogTitle = pageTitle ? pageTitle : `Wassim Nassour | ${PROFILE_TITLE}`
   const ogImage = SITE_URL + (imagePath ? imagePath : meta.ogImagePath)
-  const ogDescription = description
-    ? description
-    : "Hi 👋 I'm Wassim Nassour, self-taught  developer , I work now as a mobile engineer, also have interested in the web technologies b,& tech in general"
+  const ogDescription = description ?? PROFILE_DESCRIPTION
 
   return (
     <Head>

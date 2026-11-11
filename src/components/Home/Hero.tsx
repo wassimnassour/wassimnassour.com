@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { RESUME_URL, TWITTER_URL, socialLinks } from 'constant'
+import { ABOUT, PROFILE_TITLE, RESUME_URL, TWITTER_URL, socialLinks } from 'constant'
 
 /* eslint-disable react/no-unescaped-entities */
 export const Hero = () => {
@@ -7,7 +7,7 @@ export const Hero = () => {
     <div
       className="
          border-b border-gray-700 font-Alegreya_Sans py-20"
-    // style={{ clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0 100%)' }}
+      // style={{ clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0 100%)' }}
     >
       <div className="flex flex-col items-start justify-center w-11/12 h-full max-w-5xl mx-auto text-white sm:w-10/12 md:9/12">
         <div className="flex  flex-col  md:flex-row  justify-between md:items-center w-full  ">
@@ -22,7 +22,7 @@ export const Hero = () => {
             </div>
             <div className="flex items-start flex-col ml-6 justify-evenly">
               <h2 className="mt-3 text-4xl  md:text-4xl ml-0  font-extrabold ">Wassim Nassour</h2>
-              <span className="text-gray-400 ">Fullstack Engineer</span>
+              <span className="text-gray-400 ">{PROFILE_TITLE}</span>
             </div>
           </div>
           <div className="flex items-center mt-3 md:mt-0">
@@ -35,20 +35,8 @@ export const Hero = () => {
         </div>
 
         <p className="font-normal text-gray-300 my-7 text-lg">
-          Hey there! I'm Wassim Nassour, a Full Stack Developer passionate about building efficient
-          web and mobile apps. I currently work as Senior Front-End Developer at
-          <ExternalLink url="https://maltem.com/en/" title="Maltem Africa" /> , using React,
-          Next.js, and TypeScript. I also have experience as a Java Spring Developer, building
-          robust backend systems. Skilled in Node.js, Golang, and React Native, I love solving
-          complex problems and staying ahead in tech. Let's connect!, Check out my{' '}
-          <ExternalLink url={RESUME_URL} title="Resume" />, —I'm open to exciting new opportunities!
+          {ABOUT} <ExternalLink url={RESUME_URL} title="View résumé" />
         </p>
-        <h3 className="font-extrabold text-gray-400 text-xl">Quick intro 👋🏻</h3>
-        <ul className="mb-4 pl-1 space-y-1 mt-2 text-lg">
-          <li className="">🏠 Working remotely +5 years </li>
-          <li className="">💻 interested in fullstack development </li>
-          <li className="">🛸 Technologies i'm using : React , Typescript , Node , Golang ... </li>
-        </ul>
         <a
           target="_blank"
           href={TWITTER_URL}
